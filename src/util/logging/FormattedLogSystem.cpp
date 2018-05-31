@@ -25,6 +25,7 @@
 #include <cstdarg>
 #include <thread>
 #include <iomanip>
+#include <ctime>
 #include <mutex>
 
 using namespace awsiotsdk;
@@ -45,7 +46,7 @@ static util::String CreateLogPrefixLine(LogLevel logLevel, const char *tag, cons
         tm_now = *std::localtime(&time_now);
     }
 
-    ss << std::put_time(&tm_now, "%c") << ":" << now_ms.count() % 1000 << " ";
+//    ss << std::put_time(&tm_now, "%c") << ":" << now_ms.count() % 1000 << " ";
 
     ss << tag << " [" << std::this_thread::get_id() << "] ";
     if (line && function) {
