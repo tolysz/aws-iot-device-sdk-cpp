@@ -57,7 +57,7 @@ namespace awsiotsdk {
             std::mutex queue_mutex_;
             util::Queue<T> locked_queue_;
             std::condition_variable unblock_;
-            bool queue_exit_;
+            bool queue_exit_ = true;
         };
     }
 }
