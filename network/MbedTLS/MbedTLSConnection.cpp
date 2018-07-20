@@ -114,7 +114,17 @@ namespace awsiotsdk {
             mbedtls_x509_crt_init(&clicert_);
             mbedtls_pk_init(&pkey_);
 
-            if (enable_alpn_) {
+          AWS_LOG_INFO(MBEDTLS_WRAPPER_LOG_TAG, "....Setting up the SSL/TLS structure...");
+          if ((ret = mbedtls_ssl_config_defaults(&conf_, MBEDTLS_SSL_IS_CLIENT, MBEDTLS_SSL_TRANSPORT_STREAM,
+                                                 MBEDTLS_SSL_PRESET_DEFAULT)) != 0) {
+            AWS_LOG_ERROR(MBEDTLS_WRAPPER_LOG_TAG,
+                          "Failed!!! mbedtls_ssl_config_defaults returned -0x%x\n\n",
+                          -ret);
+            return ResponseCode::NETWORK_SSL_UNKNOWN_ERROR;
+          }
+
+
+          if (enable_alpn_) {
 #ifdef MBEDTLS_SSL_ALPN
                 if (0 != mbedtls_ssl_conf_alpn_protocols(&conf_, alpn_protocol_list)) {
                     AWS_LOG_ERROR(MBEDTLS_WRAPPER_LOG_TAG, " SSL INIT Failed - Unable to set ALPN options");
@@ -187,15 +197,6 @@ namespace awsiotsdk {
                 return ResponseCode::NETWORK_SSL_UNKNOWN_ERROR;
             }
             AWS_LOG_INFO(MBEDTLS_WRAPPER_LOG_TAG, "Ok!");
-
-            AWS_LOG_INFO(MBEDTLS_WRAPPER_LOG_TAG, "....Setting up the SSL/TLS structure...");
-            if ((ret = mbedtls_ssl_config_defaults(&conf_, MBEDTLS_SSL_IS_CLIENT, MBEDTLS_SSL_TRANSPORT_STREAM,
-                                                   MBEDTLS_SSL_PRESET_DEFAULT)) != 0) {
-                AWS_LOG_ERROR(MBEDTLS_WRAPPER_LOG_TAG,
-                              "Failed!!! mbedtls_ssl_config_defaults returned -0x%x\n\n",
-                              -ret);
-                return ResponseCode::NETWORK_SSL_UNKNOWN_ERROR;
-            }
 
             mbedtls_ssl_conf_verify(&conf_, &MbedTLSConnection::VerifyCertificate, NULL);
             if (server_verification_flag_) {
