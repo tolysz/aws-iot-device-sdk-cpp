@@ -114,7 +114,7 @@ namespace awsiotsdk {
             mbedtls_x509_crt_init(&clicert_);
             mbedtls_pk_init(&pkey_);
 
-            if (enable_alpn_) {
+            if (enable_alpn_ || endpoint_port_ == 443) {
 #ifdef MBEDTLS_SSL_ALPN
                 if (0 != mbedtls_ssl_conf_alpn_protocols(&conf_, alpn_protocol_list)) {
                     AWS_LOG_ERROR(MBEDTLS_WRAPPER_LOG_TAG, " SSL INIT Failed - Unable to set ALPN options");
