@@ -71,8 +71,8 @@ namespace awsiotsdk {
                                      return true;
                                  }
                                  if (0 < s.second->p_topic_regex_.length()) {
-                                     std::regex wildcard_regex(s.second->p_topic_regex_, std::regex::ECMAScript);
-                                     return std::regex_match(p_topic_name.c_str(),
+                                     regex::regex wildcard_regex(s.second->p_topic_regex_, regex::regex::ECMAScript);
+                                     return regex::regex_match(p_topic_name.c_str(),
                                                              wildcard_regex);
                                  }
                                  return false;
