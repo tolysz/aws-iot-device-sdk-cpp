@@ -50,6 +50,7 @@ namespace awsiotsdk {
             ResponseCode Subscribe();
             ResponseCode Unsubscribe();
             ResponseCode InitializeTLS();
+            ResponseCode close();
 
         public:
             ResponseCode RunSample();
