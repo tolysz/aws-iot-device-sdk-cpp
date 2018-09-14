@@ -47,8 +47,7 @@ namespace awsiotsdk {
             }
 
             void ThreadTask::Stop() {
-                std::atomic_bool &_m_continue_ = *m_continue_;
-                _m_continue_ = false;
+                m_continue_->store(false);
             }
         }
     }
