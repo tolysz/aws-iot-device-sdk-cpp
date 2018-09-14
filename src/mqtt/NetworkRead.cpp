@@ -126,6 +126,10 @@ namespace awsiotsdk {
                 AWS_LOG_TRACE(NETWORK_READ_LOG_TAG,
                               " Network Read Thread, TLS Status : %d",
                               p_network_connection->IsConnected());
+                if(! p_thread_continue_->load() && ! p_network_connection->IsConnected()) {
+                    AWS_LOG_TRACE(NETWORK_READ_LOG_TAG, "Break out of the reads")
+                    break;
+                }
                 // Clear buffers
                 fixed_header_byte = 0x00;
                 read_buf.clear();
