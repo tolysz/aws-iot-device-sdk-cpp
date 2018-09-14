@@ -117,15 +117,15 @@ namespace awsiotsdk {
             util::Vector<unsigned char> read_buf;
             ResponseCode rc = ResponseCode::SUCCESS;
             p_network_connection_ = p_network_connection;
-//            std::atomic_bool &_p_thread_continue_ = *p_thread_continue_;
+            std::atomic_bool &_p_thread_continue_ = *p_thread_continue_;
             std::chrono::milliseconds thread_sleep_duration(DEFAULT_CORE_THREAD_SLEEP_DURATION_MS);
 
             is_waiting_for_connack_ = !(p_client_state_->IsConnected());
 
             do {
                 AWS_LOG_TRACE(NETWORK_READ_LOG_TAG,
-                              " Network Read Thread, TLS Status : %d, continue %d",
-                              p_network_connection->IsConnected(), p_thread_continue_->load());
+                              " Network Read Thread, TLS Status : %d, continue %d (%d)",
+                              p_network_connection->IsConnected(), p_thread_continue_->load(), _p_thread_continue_);
                 if(! p_thread_continue_->load() && ! p_network_connection->IsConnected()) {
                     AWS_LOG_TRACE(NETWORK_READ_LOG_TAG, "Break out of the reads")
                     break;
