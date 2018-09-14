@@ -117,7 +117,7 @@ namespace awsiotsdk {
             util::Vector<unsigned char> read_buf;
             ResponseCode rc = ResponseCode::SUCCESS;
             p_network_connection_ = p_network_connection;
-            std::atomic_bool &_p_thread_continue_ = *p_thread_continue_;
+//            std::atomic_bool &_p_thread_continue_ = *p_thread_continue_;
             std::chrono::milliseconds thread_sleep_duration(DEFAULT_CORE_THREAD_SLEEP_DURATION_MS);
 
             is_waiting_for_connack_ = !(p_client_state_->IsConnected());
@@ -169,7 +169,7 @@ namespace awsiotsdk {
                     }
                 } else if (!is_waiting_for_connack_) {
                     is_waiting_for_connack_ = true;
-                    if (_p_thread_continue_ && p_client_state_->IsConnected()) {
+                    if (p_thread_continue_->load() && p_client_state_->IsConnected()) {
                         AWS_LOG_ERROR(NETWORK_READ_LOG_TAG,
                                       "Network Read attempt returned unhandled error. %s Requesting  Network Reconnect.",
                                       ResponseHelper::ToString(rc).c_str());
@@ -185,7 +185,7 @@ namespace awsiotsdk {
                         p_client_state_->SetAutoReconnectRequired(true);
                     }
                 }
-            } while (_p_thread_continue_);
+            } while (p_thread_continue_->load());
             return rc;
         }
 
