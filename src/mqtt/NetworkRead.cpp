@@ -189,6 +189,8 @@ namespace awsiotsdk {
                         }
                         p_client_state_->SetAutoReconnectRequired(true);
                     }
+                } else if (rc == ResponseCode::NETWORK_DISCONNECTED_ERROR) {
+                    break;
                 }
             } while (p_thread_continue_->load());
             return rc;
