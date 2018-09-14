@@ -47,7 +47,7 @@ namespace awsiotsdk {
             }
 
             void ThreadTask::Stop() {
-                m_continue_->store(false);
+                m_continue_->store(false, std::memory_order_release);
             }
         }
     }

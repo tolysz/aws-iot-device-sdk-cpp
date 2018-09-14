@@ -125,7 +125,7 @@ namespace awsiotsdk {
             do {
                 AWS_LOG_TRACE(NETWORK_READ_LOG_TAG,
                               " Network Read Thread, TLS Status : %d, continue %d (%d)",
-                              p_network_connection->IsConnected(), p_thread_continue_->load(), _p_thread_continue_.load());
+                              p_network_connection->IsConnected(), p_thread_continue_->load(std::memory_order_acquire), _p_thread_continue_.load(std::memory_order_acquire));
                 if(! p_thread_continue_->load() && ! p_network_connection->IsConnected()) {
                     AWS_LOG_TRACE(NETWORK_READ_LOG_TAG, "Break out of the reads")
                     break;
@@ -192,7 +192,7 @@ namespace awsiotsdk {
                 } else if (rc == ResponseCode::NETWORK_DISCONNECTED_ERROR) {
                     break;
                 }
-            } while (p_thread_continue_->load());
+            } while (p_thread_continue_->load(std::memory_order_acquire));
             return rc;
         }
 
