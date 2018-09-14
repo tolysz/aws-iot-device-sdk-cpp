@@ -134,8 +134,8 @@ namespace awsiotsdk {
                 fixed_header_byte = 0x00;
                 read_buf.clear();
                 rc = ReadPacketFromNetwork(fixed_header_byte, read_buf);
+                AWS_LOG_TRACE(NETWORK_READ_LOG_TAG, "ReadPacketFromNetwork %s", ResponseHelper::ToString(rc).c_str());
                 if (ResponseCode::NETWORK_SSL_NOTHING_TO_READ == rc) {
-                    AWS_LOG_TRACE(NETWORK_READ_LOG_TAG, "NETWORK_SSL_NOTHING_TO_READ");
                     std::this_thread::sleep_for(thread_sleep_duration);
                     continue;
                 } else if (ResponseCode::SUCCESS == rc) {
