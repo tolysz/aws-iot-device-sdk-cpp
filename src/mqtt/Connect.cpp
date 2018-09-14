@@ -358,6 +358,8 @@ namespace awsiotsdk {
 
             //Ignore error codes, always assume disconnect
             p_client_state_->SetConnected(false);
+            p_client_state_->SetAutoReconnectEnabled(false);
+            p_thread_continue_->store(false);
 
             ResponseCode rc = ResponseCode::SUCCESS;
 
