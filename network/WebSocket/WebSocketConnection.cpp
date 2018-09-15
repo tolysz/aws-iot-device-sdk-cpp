@@ -437,7 +437,7 @@ namespace awsiotsdk {
                 std::lock_guard<std::mutex> time_ops_guard(time_ops_lock_);
 
                 // Get current system time
-                auto now = std::chrono::system_clock::now();
+                auto now = std::chrono::steady_clock::now();
                 std::time_t current_time = std::chrono::system_clock::to_time_t(now);
 
                 // Get time, not required to free this
