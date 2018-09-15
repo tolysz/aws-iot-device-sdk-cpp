@@ -358,9 +358,6 @@ namespace awsiotsdk {
 
             //Ignore error codes, always assume disconnect
             p_client_state_->SetConnected(false);
-            p_client_state_->SetAutoReconnectEnabled(false);
-            p_thread_continue_->store(false);
-
             ResponseCode rc = ResponseCode::SUCCESS;
 
             // Attempt to send MQTT Disconnect if Network is still connected
@@ -412,11 +409,11 @@ namespace awsiotsdk {
         ResponseCode KeepaliveActionRunner::PerformAction(std::shared_ptr<NetworkConnection> p_network_connection,
                                                           std::shared_ptr<ActionData> p_action_data) {
             // TODO : This action needs cleanup in the future
-            std::atomic_bool &_p_thread_continue_ = *p_thread_continue_;
+//            std::atomic_bool &_p_thread_continue_ = *p_thread_continue_;
             std::chrono::milliseconds thread_sleep_duration(DEFAULT_CORE_THREAD_SLEEP_DURATION_MS);
 
             // Wait for first connect, keep alive data will not be available until then
-            while (_p_thread_continue_ && !p_client_state_->IsConnected()) {
+            while (p_thread_continue_->load() && !p_client_state_->IsConnected()) {
                 std::this_thread::sleep_for(thread_sleep_duration);
             }
 
@@ -594,7 +591,7 @@ namespace awsiotsdk {
                     }
                 }
                 std::this_thread::sleep_for(thread_sleep_duration);
-            } while (_p_thread_continue_);
+            } while (p_thread_continue_->load());
 
             return rc;
         }
