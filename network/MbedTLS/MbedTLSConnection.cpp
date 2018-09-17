@@ -329,7 +329,8 @@ namespace awsiotsdk {
                     remaining_bytes_to_read -= ret;
                     size_read_bytes_out = total_read_length;
                 } else if (ret != MBEDTLS_ERR_SSL_WANT_READ && ret != MBEDTLS_ERR_SSL_WANT_WRITE
-                    && ret != MBEDTLS_ERR_SSL_TIMEOUT) {
+//                    && ret != MBEDTLS_ERR_SSL_TIMEOUT
+                    ) {
                     return ResponseCode::NETWORK_SSL_READ_ERROR;
                 }
                 elapsed_time = std::chrono::steady_clock::now() - start;
