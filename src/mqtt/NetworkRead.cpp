@@ -173,7 +173,7 @@ namespace awsiotsdk {
                             break;
                     }
 //                } else if (ResponseCode::SUCCESS == rc) {
-                } else if (-410 == rc) {
+                } else if (ResponseCode::NETWORK_SSL_READ_ERROR == rc) {
                   break;
                 } else if (!is_waiting_for_connack_) {
                     is_waiting_for_connack_ = true;
