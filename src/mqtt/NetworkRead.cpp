@@ -120,7 +120,7 @@ namespace awsiotsdk {
             std::atomic_bool &_p_thread_continue_ = *p_thread_continue_;
             std::chrono::milliseconds thread_sleep_duration(DEFAULT_CORE_THREAD_SLEEP_DURATION_MS);
 
-            is_waiting_for_connack_ = !(p_client_state_->IsConnected());
+            is_waiting_for_connack_ = !(p_client_state_->IsConnected()) && p_thread_continue_->load();
 
             do {
                 AWS_LOG_TRACE(NETWORK_READ_LOG_TAG,
@@ -172,6 +172,9 @@ namespace awsiotsdk {
                             // Packet types used for QoS2 are currently unsupported
                             break;
                     }
+//                } else if (ResponseCode::SUCCESS == rc) {
+                } else if (-410 == rc) {
+                  break;
                 } else if (!is_waiting_for_connack_) {
                     is_waiting_for_connack_ = true;
                     if (p_thread_continue_->load() && p_client_state_->IsConnected()) {
