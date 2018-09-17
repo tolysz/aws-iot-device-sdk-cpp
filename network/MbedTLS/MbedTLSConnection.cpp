@@ -333,7 +333,7 @@ namespace awsiotsdk {
                     return ResponseCode::NETWORK_SSL_READ_ERROR;
                 }
                 elapsed_time = std::chrono::steady_clock::now() - start;
-                AWS_LOGSTREAM_ERROR(MBEDTLS_WRAPPER_LOG_TAG, "MbedTLS " << hex <<  int(ret) << " reminding " << elapsed_time);
+                AWS_LOG_ERROR(MBEDTLS_WRAPPER_LOG_TAG, "ReadInternal -0x%x rem %d\n\n", -ret, elapsed_time);
             } while (remaining_bytes_to_read > 0 &&
                     tls_read_timeout_ > std::chrono::duration_cast<std::chrono::milliseconds>(elapsed_time));
 
