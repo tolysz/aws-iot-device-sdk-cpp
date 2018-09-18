@@ -169,14 +169,14 @@ namespace awsiotsdk {
                             p_async_ack_handler(p_action_data->GetActionId(), rc);
                         }
                         AWS_LOG_ERROR(LOG_TAG_CLIENT_CORE_STATE,
-                                      "Performing Outbound Queued Action failed. %s",
+                                      "Performing Outbound Queued Action (1) failed. %s",
                                       ResponseHelper::ToString(rc).c_str());
                     }
                 }
             } else {
                 rc = ResponseCode::ACTION_NOT_REGISTERED_ERROR;
                 AWS_LOG_ERROR(LOG_TAG_CLIENT_CORE_STATE,
-                              "Performing Outbound Queued Action failed. %s",
+                              "Performing Outbound Queued Action (2) failed. %s",
                               ResponseHelper::ToString(rc).c_str());
             }
             // This is not perfect since we have no control over how long an action takes.
