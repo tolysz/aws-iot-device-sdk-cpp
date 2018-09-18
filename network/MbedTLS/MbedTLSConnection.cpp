@@ -291,7 +291,9 @@ namespace awsiotsdk {
                 if (ret > 0) {
                     total_written_length += ret;
                 } else if (ret != MBEDTLS_ERR_SSL_WANT_READ && ret != MBEDTLS_ERR_SSL_WANT_WRITE) {
-                    AWS_LOG_ERROR(MBEDTLS_WRAPPER_LOG_TAG, "Failed!!! mbedtls_ssl_write returned -0x%x\n\n", -ret);
+                    char errmsg[256];
+                    mbedtls_strerror(ret,errmsg,256);
+                    AWS_LOG_ERROR(MBEDTLS_WRAPPER_LOG_TAG, "Failed!!! mbedtls_ssl_write returned: %s -0x%x\n\n",errmsg, -ret);
                     /* All other negative return values indicate connection needs to be reset.
                      * Will be caught in ping request so ignored here */
                     isErrorFlag = true;
