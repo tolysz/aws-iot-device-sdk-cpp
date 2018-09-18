@@ -297,6 +297,8 @@ namespace awsiotsdk {
                     /* All other negative return values indicate connection needs to be reset.
                      * Will be caught in ping request so ignored here */
                     isErrorFlag = true;
+                    if (ret == MBEDTLS_ERR_NET_CONN_RESET)
+                        return ResponseCode::NETWORK_SSL_CONNECTION_CLOSED_ERROR;
                     break;
                 }
                 elapsed_time = std::chrono::steady_clock::now() - start;
