@@ -131,7 +131,7 @@ namespace awsiotsdk {
     void ClientCoreState::ProcessOutboundActionQueue(std::shared_ptr<std::atomic_bool> thread_task_out_sync) {
         ResponseCode rc = ResponseCode::SUCCESS;
         int action_execution_delay = 1000 / MAX_CORE_ACTION_PROCESSING_RATE_HZ;
-        std::atomic_bool &_thread_task_out_sync = *thread_task_out_sync;
+//        std::atomic_bool &_thread_task_out_sync = *thread_task_out_sync;
         do {
             // Reset ResponseCode state
             rc = ResponseCode::SUCCESS;
@@ -182,7 +182,7 @@ namespace awsiotsdk {
             // This is not perfect since we have no control over how long an action takes.
             // But it will definitely ensure that we don't exceed the max rate
             std::this_thread::sleep_until(next);
-        } while (_thread_task_out_sync);
+        } while (thread_task_out_sync && thread_task_out_sync->load());
     }
 
     ResponseCode ClientCoreState::RegisterPendingAck(uint16_t action_id,

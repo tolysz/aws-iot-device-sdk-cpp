@@ -206,7 +206,7 @@ namespace awsiotsdk {
                 if (is_ack_registered) {
                     p_client_state_->DeletePendingAck(packet_id);
                 }
-                AWS_LOG_ERROR(PUBLISH_ACTION_LOG_TAG, "Publish Write to Network Failed. %s",
+                AWS_LOG_ERROR(PUBLISH_ACTION_LOG_TAG, "Publish (1) Write to Network Failed. %s",
                               ResponseHelper::ToString(rc).c_str());
             }
             return rc;
