@@ -314,7 +314,7 @@ namespace awsiotsdk {
                 rc = ResponseCode::NETWORK_SSL_WRITE_ERROR;
             } else if (tls_write_timeout_ > std::chrono::duration_cast<std::chrono::milliseconds>(elapsed_time) &&
                     total_written_length != bytes_to_write) {
-                is_connected_ = false;
+//                is_connected_ = false;
                 return ResponseCode::NETWORK_SSL_WRITE_TIMEOUT_ERROR;
             }
 
@@ -336,9 +336,7 @@ namespace awsiotsdk {
                     total_read_length += ret;
                     remaining_bytes_to_read -= ret;
                     size_read_bytes_out = total_read_length;
-                } else if (ret != MBEDTLS_ERR_SSL_WANT_READ && ret != MBEDTLS_ERR_SSL_WANT_WRITE
-//                    && ret != MBEDTLS_ERR_SSL_TIMEOUT
-                    ) {
+                } else if (ret != MBEDTLS_ERR_SSL_WANT_READ && ret != MBEDTLS_ERR_SSL_WANT_WRITE && ret != MBEDTLS_ERR_SSL_TIMEOUT) {
                     is_connected_ = false;
                     return ResponseCode::NETWORK_SSL_READ_ERROR;
                 }
@@ -352,7 +350,7 @@ namespace awsiotsdk {
             } else if (size_read_bytes_out == size_bytes_to_read) {
                 return ResponseCode::SUCCESS;
             } else if (0 < total_read_length) {
-                is_connected_ = false;
+//                is_connected_ = false;
                 return ResponseCode::NETWORK_SSL_READ_TIMEOUT_ERROR;
             }
             is_connected_ = false;
