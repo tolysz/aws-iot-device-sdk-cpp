@@ -105,6 +105,7 @@ namespace awsiotsdk {
             char port_buf[6];
             char vrfy_buf[512];
             const char* alpn_protocol_list[] = {"x-amzn-mqtt-ca", nullptr};
+            is_connected_ = false;
 
             mbedtls_net_init(&server_fd_);
             mbedtls_ssl_init(&ssl_);
@@ -271,7 +272,8 @@ namespace awsiotsdk {
             }
 
             mbedtls_ssl_conf_read_timeout(&conf_, static_cast<uint32_t>(tls_read_timeout_.count()));
-            is_connected_ = true;
+            if(rc == ResponseCode::SUCCESS)
+              is_connected_ = true;
             return rc;
         }
 
