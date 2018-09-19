@@ -384,7 +384,7 @@ namespace awsiotsdk {
         }
 
         MbedTLSConnection::~MbedTLSConnection() {
-            Disconnect();
+            DisconnectInternal();
         }
     }
 }
