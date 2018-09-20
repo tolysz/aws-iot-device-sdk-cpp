@@ -345,7 +345,7 @@ namespace awsiotsdk {
                     return ResponseCode::NETWORK_SSL_READ_ERROR;
                 }
                 elapsed_time = std::chrono::steady_clock::now() - start;
-                AWS_LOG_ERROR(MBEDTLS_WRAPPER_LOG_TAG, "ReadInternal %s -0x%x rem %d\n\n", mbedtlsError(ret).c_str(), -ret, elapsed_time);
+                AWS_LOG_ERROR(MBEDTLS_WRAPPER_LOG_TAG, "ReadInternal %s -0x%x rem %lld\n\n", mbedtlsError(ret).c_str(), -ret, elapsed_time);
             } while (remaining_bytes_to_read > 0 &&
                     tls_read_timeout_ > std::chrono::duration_cast<std::chrono::milliseconds>(elapsed_time));
 
@@ -354,7 +354,7 @@ namespace awsiotsdk {
             } else if (size_read_bytes_out == size_bytes_to_read) {
                 return ResponseCode::SUCCESS;
             } else if (0 < total_read_length) {
-//                is_connected_ = false;
+                is_connected_ = false;
                 return ResponseCode::NETWORK_SSL_READ_TIMEOUT_ERROR;
             }
             is_connected_ = false;
