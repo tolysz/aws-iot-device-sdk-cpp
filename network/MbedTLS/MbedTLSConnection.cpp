@@ -277,6 +277,12 @@ namespace awsiotsdk {
             return rc;
         }
 
+        util::String mbedtlsError (int err) {
+            char errmsg[256];
+            mbedtls_strerror(err, errmsg, 256);
+            return util::String(errmsg);
+        }
+
         ResponseCode MbedTLSConnection::WriteInternal(const util::String &buf, size_t &size_written_bytes_out) {
             size_t total_written_length = 0;
             ResponseCode rc = ResponseCode::SUCCESS;
@@ -293,9 +299,7 @@ namespace awsiotsdk {
                 if (ret > 0) {
                     total_written_length += ret;
                 } else if (ret != MBEDTLS_ERR_SSL_WANT_READ && ret != MBEDTLS_ERR_SSL_WANT_WRITE) {
-                    char errmsg[256];
-                    mbedtls_strerror(ret,errmsg,256);
-                    AWS_LOG_ERROR(MBEDTLS_WRAPPER_LOG_TAG, "Failed!!! mbedtls_ssl_write returned: %s -0x%x\n\n",errmsg, -ret);
+                    AWS_LOG_ERROR(MBEDTLS_WRAPPER_LOG_TAG, "Failed!!! mbedtls_ssl_write returned: %s -0x%x\n\n", mbedtlsError(ret).c_str(), -ret);
                     /* All other negative return values indicate connection needs to be reset.
                      * Will be caught in ping request so ignored here */
                     isErrorFlag = true;
@@ -341,7 +345,7 @@ namespace awsiotsdk {
                     return ResponseCode::NETWORK_SSL_READ_ERROR;
                 }
                 elapsed_time = std::chrono::steady_clock::now() - start;
-                AWS_LOG_ERROR(MBEDTLS_WRAPPER_LOG_TAG, "ReadInternal -0x%x rem %d\n\n", -ret, elapsed_time);
+                AWS_LOG_ERROR(MBEDTLS_WRAPPER_LOG_TAG, "ReadInternal %s -0x%x rem %d\n\n", mbedtlsError(ret).c_str(), -ret, elapsed_time);
             } while (remaining_bytes_to_read > 0 &&
                     tls_read_timeout_ > std::chrono::duration_cast<std::chrono::milliseconds>(elapsed_time));
 
