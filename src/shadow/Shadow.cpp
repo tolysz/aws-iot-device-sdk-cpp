@@ -574,8 +574,10 @@ namespace awsiotsdk {
 
         util::String payload = util::JsonParser::ToString(diff);
 
-        rc = p_mqtt_client_->Publish(Utf8String::Create(shadow_topic_update_), false, false, mqtt::QoS::QOS0,
-                                     payload, mqtt_command_timeout_);
+        if (diff.HasMember(SHADOW_DOCUMENT_STATE_KEY)) {
+              rc = p_mqtt_client_->Publish(Utf8String::Create(shadow_topic_update_), false, false, mqtt::QoS::QOS0,
+                  payload, mqtt_command_timeout_);
+        }
 
         return rc;
     }
